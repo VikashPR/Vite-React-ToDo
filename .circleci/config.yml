@@ -21,9 +21,9 @@ jobs:
           name: Build
           command: |
             if [ $CIRCLE_BRANCH = 'circleci-project-setup' ]; then
-            async function build() {
-            await npm run build
-            }
+              function build() {
+                npm run build
+              }
               build()
             fi
       - persist_to_workspace:
