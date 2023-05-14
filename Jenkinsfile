@@ -1,10 +1,10 @@
 pipeline {
-    agent {
+   agent {
     docker {
-        image 'docker:dind'
-        args '--privileged --entrypoint=""'
-        reuseNode true
+        image 'node:6-alpine'
+        args '-p 3000:3000 -v /var/run/docker.sock:/var/run/docker.sock'
     }
+}
 }
     stages {
         stage('Build') {
