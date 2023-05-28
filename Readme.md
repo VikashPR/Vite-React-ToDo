@@ -5,13 +5,11 @@
 ``` bash
 npm install
 ```
-
 ### Run the project
 
 ``` bash
 npm run dev
 ```
-
 # Setup CI/CD Pipeline
 
 - Create a new repository on Github
