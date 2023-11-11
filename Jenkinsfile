@@ -35,14 +35,28 @@ pipeline {
 
   postBuild {
     steps {
-      // Update plugins before attempting to install new ones
+      // Update existing plugins before installing new ones
       sh 'jenkins-cli plugins -update'
 
-      // Install missing plugins manually
-      sh 'jenkins-cli plugins -install ssh-slaves antisamy-markup-formatter workflow-api instance-identity-provider'
+      // Install missing plugins manually, handling specific error cases
+      sh '''
+        jenkins-cli plugins -install ssh-slaves antisamy-markup-formatter workflow-api
 
-      // Try reinstalling previously failed plugins
-      sh 'jenkins-cli plugins -install ldap timestamper pipeline-rest-api pipeline-stage-view'
+        # Install instance-identity-provider, skipping if plugin is already installed
+        jenkins-cli plugins -install instance-identity-provider || echo "Instance Identity Provider Plugin already installed"
+
+        # Install ldap, handling dependency update
+        jenkins-cli plugins -install ldap && jenkins-cli plugins -update ldap
+
+        # Install timestamper, handling dependency updates
+        jenkins-cli plugins -install timestamper && jenkins-cli plugins -update timestamper
+
+        # Install pipeline-rest-api, handling Jenkins version incompatibility
+        jenkins-cli plugins -install pipeline-rest-api || echo "Pipeline: REST API Plugin requires Jenkins 2.361 or higher"
+
+        # Install pipeline-stage-view, handling dependency on pipeline-rest-api
+        jenkins-cli plugins -install pipeline-stage-view || echo "Pipeline: Stage View Plugin requires Pipeline: REST API Plugin to be installed"
+      '''
 
       // Restart Jenkins to apply plugin changes
       sh 'service jenkins restart'
