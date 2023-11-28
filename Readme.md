@@ -18,10 +18,10 @@ npm run dev
 ### Download Jenkins Image For Docker
 
 ``` bash
-docker pull jenkinsci/blueocean
-docker run -p 8080:8080 jenkinsci/blueocean
+docker pull jenkins/jenkins:lts
+docker run -p 8080:8080 jenkins/jenkins:lts
 ```
-- Open your browser and go to http://localhost:8080/blue
+- Open your browser and go to http://localhost:8080/
 - Copy the password from the terminal and paste it in the browser
 - Install suggested plugins
 
